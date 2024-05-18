@@ -71,8 +71,6 @@
     uint8_t *p2_out = (uint8_t*)0x040004c03;        // <-- Direcciones ?
     uint8_t *p2_dir = (uint8_t*)0x040004c05;
 
-
-
 /************************************************
     PROTOTIPO DE FUNCION
 ************************************************/
@@ -104,8 +102,8 @@ void main(void)
 	*p1_ren |= 0x10;                                //HABILITAMOS RESISTENCIA
 	*p1_out |= 0x10;                                //PULL UP
 
-	                                        // PIN P1.0 COMO SALIDA,  --> LED <--
-	                                        // <-- LED ENCENDIDO
+	*p1_dir |= 0x01;                                // PIN P1.0 COMO SALIDA,  --> LED <--
+	*p1_out |= 0x01;                                // <-- LED ENCENDIDO
 
 	*p2_dir |= 0x07;                                //PIN P2.0, P2.1, P2.2  COMO SALIDA, LEDS RGB
 	*p2_out &= ~0x07;                               // APAGADOS
@@ -113,7 +111,7 @@ void main(void)
 
 	    if ( Gpio_Pin_in(0x10) != 1)                // ENTRA AL PRESIONAR EL SWITCH DEL PUERTO P1.4 (CUANDO ESTA EN BAJO)
 	    {
-	                                        // <-- LED APAGADO
+	        *p1_out &= ~0x01;                 // <-- LED APAGADO
 	        if(bandera == FALSE)
 	            {
 	                bandera = TRUE;                                 //BANDERA EN ALTO
@@ -133,7 +131,7 @@ void main(void)
 
 	            }
 	        *p2_out  &= ~0x07;                                      //APAGA TODOS RGB
-	                                        // <-- LED ENCENDIDO
+	        *p1_out |= 0x01;                                // <-- LED ENCENDIDO
    	    }
 	    for(i=RETARDO2; i>0 ;i--);
 	}
